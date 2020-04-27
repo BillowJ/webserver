@@ -7,4 +7,4 @@ protected:
 private:
     noncopyable(const noncopyable&);
     const noncopyable& operator=(const noncopyable&);
-}
+};

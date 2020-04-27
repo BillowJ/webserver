@@ -16,10 +16,10 @@ using namespace std;
 
 int TIMER_TIME_OUT = 500;
 
-struct epoll_event *Epoll::events;
+epoll_event *Epoll::events;
 Epoll::SP_ReqData Epoll::fd2req[MAXFDS];
 int Epoll::epoll_fd = 0;
-const std::string Epoll::PATH = "/"
+const std::string Epoll::PATH = "/";
 
 //初始化
 int Epoll::epoll_init(int maxevents, int listen_num)
@@ -77,7 +77,7 @@ int Epoll::epoll_del(int fd, __uint32_t events)
 }
 
 //返回活跃的事件数
-void Epoll::my_epoll_wait(int listen_fd, SP_ReqData events, int max_evens, int timeout)
+void Epoll::my_epoll_wait(int listen_fd,int max_evens, int timeout)
 {
     int event_count = epoll_wait(epoll_fd, events, max_evens, timeout);
     if(event_count < 0){

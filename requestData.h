@@ -67,11 +67,11 @@ enum HeaderState
     h_LF,
     h_end_CR,
     h_end_LF
-}
+};
 
 class TimerNode;
 
-class Request : public std::enable_shared_from_this<RequestData>
+class RequestData : public std::enable_shared_from_this<RequestData>
 {
 private:
     std::string path;
@@ -85,7 +85,7 @@ private:
 
     int method;
     int HTTPversion;
-    std:: sting file_name;
+    std::string file_name;
     int now_read_pos;
     int state;
     bool isfinish;
@@ -125,4 +125,4 @@ public:
     bool canRead();
 
     bool canWrite();
-}
+};

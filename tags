@@ -1,0 +1,342 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AGAIN_MAX_TIMES	requestData.h	/^const int AGAIN_MAX_TIMES = 200;$/;"	v
+ANALYSIS_ERROR	requestData.h	/^const int ANALYSIS_ERROR = -2;$/;"	v
+ANALYSIS_SUCCESS	requestData.h	/^const int ANALYSIS_SUCCESS = 0;$/;"	v
+CC	makefile	/^CC	 	:= g++$/;"	m
+CXXFLAGS	makefile	/^CXXFLAGS:= -std=c++11 -g -Wall -o3 $(INCLUDE)$/;"	m
+EPOLL_WAIT_TIME	requestData.h	/^const int EPOLL_WAIT_TIME = 500;$/;"	v
+EVENTPOLL	epoll.h	3;"	d
+Epoll	epoll.h	/^class Epoll$/;"	c
+Epoll::MAXFDS	epoll.h	/^    static const int MAXFDS = 1000;$/;"	m	class:Epoll	access:private
+Epoll::PATH	epoll.h	/^    static const std::string PATH;$/;"	m	class:Epoll	access:private
+Epoll::SP_ReqData	epoll.h	/^    typedef std::shared_ptr<RequestData> SP_ReqData;$/;"	t	class:Epoll	access:public
+Epoll::acceptConnection	epoll.h	/^    static void acceptConnection(int listen_fd, int epoll_fd, const std::string path);$/;"	p	class:Epoll	access:public	signature:(int listen_fd, int epoll_fd, const std::string path)
+Epoll::add_timer	epoll.h	/^    static void add_timer(SP_ReqData request_data, int timeout);$/;"	p	class:Epoll	access:public	signature:(SP_ReqData request_data, int timeout)
+Epoll::epoll_add	epoll.h	/^    static int epoll_add(int fd, SP_ReqData request, __uint32_t events);$/;"	p	class:Epoll	access:public	signature:(int fd, SP_ReqData request, __uint32_t events)
+Epoll::epoll_del	epoll.h	/^    static int epoll_del(int fd, __uint32_t events = (EPOLIN | EPOLLET | EPOLLONESHOT));$/;"	p	class:Epoll	access:public	signature:(int fd, __uint32_t events = (EPOLIN | EPOLLET | EPOLLONESHOT))
+Epoll::epoll_fd	epoll.cpp	/^int Epoll::epoll_fd = 0;$/;"	m	class:Epoll	file:
+Epoll::epoll_fd	epoll.h	/^    static int epoll_fd;$/;"	m	class:Epoll	access:private
+Epoll::epoll_init	epoll.h	/^    static int epoll_init(int maxevents, int listen_num);$/;"	p	class:Epoll	access:public	signature:(int maxevents, int listen_num)
+Epoll::epoll_mod	epoll.h	/^    static int epoll_mod(int fd, SP_ReqData request, __uint32_t events);$/;"	p	class:Epoll	access:public	signature:(int fd, SP_ReqData request, __uint32_t events)
+Epoll::events	epoll.cpp	/^struct epoll_event *Epoll::events;$/;"	m	class:Epoll	typeref:struct:Epoll::	file:
+Epoll::events	epoll.h	/^    static epoll_even *events;$/;"	m	class:Epoll	access:private
+Epoll::fd2req	epoll.cpp	/^Epoll::SP_ReqData Epoll::fd2req[MAXFDS];$/;"	m	class:Epoll	file:
+Epoll::fd2req	epoll.h	/^    static SP_ReqData fd2req[MAXFDS];$/;"	m	class:Epoll	access:private
+Epoll::getEventsRequest	epoll.h	/^    static std::vector<SP_ReqData> getEventsRequest(int listen_fd, int events_num, const std::string path);$/;"	p	class:Epoll	access:public	signature:(int listen_fd, int events_num, const std::string path)
+Epoll::my_epoll_wait	epoll.h	/^    static void my_epoll_wait(int listen_fd, int max_evens, int timeout);$/;"	p	class:Epoll	access:public	signature:(int listen_fd, int max_evens, int timeout)
+Epoll::timer_manager	epoll.h	/^    static TimerManager timer_manager;$/;"	m	class:Epoll	access:private
+HTTP_10	requestData.h	/^const int HTTP_10 = 1;$/;"	v
+HTTP_11	requestData.h	/^const int HTTP_11 = 2;$/;"	v
+HTTPversion	requestData.h	/^    int HTTPversion;$/;"	m	class:Request	access:private
+HeaderState	requestData.h	/^enum HeaderState$/;"	g
+INCLUDE	makefile	/^INCLUDE := $/;"	m
+LIBS	makefile	/^LIBS 	:= -lpthread$/;"	m
+MAXFDS	epoll.h	/^    static const int MAXFDS = 1000;$/;"	m	class:Epoll	access:private
+MAX_BUFF	requestData.h	/^const int MAX_BUFF = 4096;$/;"	v
+MAX_QUEUE	threadpool.h	/^const int MAX_QUEUE = 65535;$/;"	v
+MAX_THREADS	threadpool.h	/^const int MAX_THREADS = 1024;$/;"	v
+METHOD_GET	requestData.h	/^const int METHOD_GET = 2;$/;"	v
+METHOD_POST	requestData.h	/^const int METHOD_POST = 1;$/;"	v
+MimeType	requestData.h	/^    MimeType();$/;"	p	class:MimeType	access:private	signature:()
+MimeType	requestData.h	/^    MimeType(const MimeType &m);$/;"	p	class:MimeType	access:private	signature:(const MimeType &m)
+MimeType	requestData.h	/^class MimeType$/;"	c
+MimeType::MimeType	requestData.h	/^    MimeType();$/;"	p	class:MimeType	access:private	signature:()
+MimeType::MimeType	requestData.h	/^    MimeType(const MimeType &m);$/;"	p	class:MimeType	access:private	signature:(const MimeType &m)
+MimeType::getMime	requestData.h	/^    static std::string getMime(const std::string &suffix);$/;"	p	class:MimeType	access:public	signature:(const std::string &suffix)
+MimeType::init	requestData.h	/^    static void init();$/;"	p	class:MimeType	access:private	signature:()
+MimeType::mime	requestData.h	/^    static std::unordered_map<std::string, std::string> mime;$/;"	m	class:MimeType	access:private
+MimeType::once_control	requestData.h	/^    static pthread_once_t once_control;$/;"	m	class:MimeType	access:private
+MutexLock	base/mutexLock.hpp	/^    MutexLock()$/;"	f	class:MutexLock	access:public	signature:()
+MutexLock	base/mutexLock.hpp	/^class MutexLock: noncopyable$/;"	c	inherits:noncopyable
+MutexLock::MutexLock	base/mutexLock.hpp	/^    MutexLock()$/;"	f	class:MutexLock	access:public	signature:()
+MutexLock::get	base/mutexLock.hpp	/^    pthread_mutex_t *get()$/;"	f	class:MutexLock	access:public	signature:()
+MutexLock::lock	base/mutexLock.hpp	/^    void lock()$/;"	f	class:MutexLock	access:public	signature:()
+MutexLock::mutex	base/mutexLock.hpp	/^    pthread_mutex_t mutex;$/;"	m	class:MutexLock	access:private
+MutexLock::unlock	base/mutexLock.hpp	/^    void unlock()$/;"	f	class:MutexLock	access:public	signature:()
+MutexLock::~MutexLock	base/mutexLock.hpp	/^    ~MutexLock()$/;"	f	class:MutexLock	access:public	signature:()
+MutexLockGuard	base/mutexLock.hpp	/^    explicit MutexLockGuard(MutexLock &_mutex):$/;"	f	class:MutexLockGuard	access:public	signature:(MutexLock &_mutex)
+MutexLockGuard	base/mutexLock.hpp	/^class MutexLockGuard: noncopyable$/;"	c	inherits:noncopyable
+MutexLockGuard::MutexLockGuard	base/mutexLock.hpp	/^    explicit MutexLockGuard(MutexLock &_mutex):$/;"	f	class:MutexLockGuard	access:public	signature:(MutexLock &_mutex)
+MutexLockGuard::mutex	base/mutexLock.hpp	/^    MutexLock &mutex;$/;"	m	class:MutexLockGuard	access:private
+MutexLockGuard::~MutexLockGuard	base/mutexLock.hpp	/^    ~MutexLockGuard()$/;"	f	class:MutexLockGuard	access:public	signature:()
+PARSE_HEADER_AGAIN	requestData.h	/^const int PARSE_HEADER_AGAIN = -1;$/;"	v
+PARSE_HEADER_ERROR	requestData.h	/^const int PARSE_HEADER_ERROR = -2;$/;"	v
+PARSE_HEADER_SUCCESS	requestData.h	/^const int PARSE_HEADER_SUCCESS = 0;$/;"	v
+PARSE_URI_AGAIN	requestData.h	/^const int PARSE_URI_AGAIN = -1;$/;"	v
+PARSE_URI_ERROR	requestData.h	/^const int PARSE_URI_ERROR = -2;$/;"	v
+PARSE_URI_SUCCESS	requestData.h	/^const int PARSE_URI_SUCCESS = 0;$/;"	v
+PATH	epoll.h	/^    static const std::string PATH;$/;"	m	class:Epoll	access:private
+PORT	main.cpp	/^const int PORT = 8888;$/;"	v
+Request	requestData.h	/^class Request : public std::enable_shared_from_this<RequestData>$/;"	c	inherits:std::enable_shared_from_this
+Request::HTTPversion	requestData.h	/^    int HTTPversion;$/;"	m	class:Request	access:private
+Request::RequestData	requestData.h	/^    RequestData();$/;"	p	class:Request	access:public	signature:()
+Request::RequestData	requestData.h	/^    RequestData(int _epollfd, int _fd, std::string _path);$/;"	p	class:Request	access:public	signature:(int _epollfd, int _fd, std::string _path)
+Request::analysisRequest	requestData.h	/^    int analysisRequest();$/;"	p	class:Request	access:private	signature:()
+Request::canRead	requestData.h	/^    bool canRead();$/;"	p	class:Request	access:public	signature:()
+Request::canWrite	requestData.h	/^    bool canWrite();$/;"	p	class:Request	access:public	signature:()
+Request::disableReadAndWrite	requestData.h	/^    void disableReadAndWrite();$/;"	p	class:Request	access:public	signature:()
+Request::enableRead	requestData.h	/^    void enableRead();$/;"	p	class:Request	access:public	signature:()
+Request::enableWrite	requestData.h	/^    void enableWrite();$/;"	p	class:Request	access:public	signature:()
+Request::epollfd	requestData.h	/^    int epollfd;$/;"	m	class:Request	access:private
+Request::error	requestData.h	/^    bool error;$/;"	m	class:Request	access:private
+Request::events	requestData.h	/^    __uint32_t events;$/;"	m	class:Request	access:private
+Request::fd	requestData.h	/^    int fd;$/;"	m	class:Request	access:private
+Request::file_name	requestData.h	/^    std:: sting file_name;$/;"	m	class:Request	access:private
+Request::getFd	requestData.h	/^    int getFd();$/;"	p	class:Request	access:public	signature:()
+Request::handleConn	requestData.h	/^    void handleConn();$/;"	p	class:Request	access:public	signature:()
+Request::handleError	requestData.h	/^    void handleError(int fd, int err_num, std::string short_msg);$/;"	p	class:Request	access:public	signature:(int fd, int err_num, std::string short_msg)
+Request::handleRead	requestData.h	/^    void handleRead();$/;"	p	class:Request	access:public	signature:()
+Request::handleWrite	requestData.h	/^    void handleWrite();$/;"	p	class:Request	access:public	signature:()
+Request::headers	requestData.h	/^    std::unordered_map<std::string, std::string> headers;$/;"	m	class:Request	access:private
+Request::inBuffer	requestData.h	/^    std::string inBuffer;$/;"	m	class:Request	access:private
+Request::isAbleRead	requestData.h	/^    bool isAbleRead;$/;"	m	class:Request	access:private
+Request::isAbleWrite	requestData.h	/^    bool isAbleWrite;$/;"	m	class:Request	access:private
+Request::isfinish	requestData.h	/^    bool isfinish;$/;"	m	class:Request	access:private
+Request::keep_alive	requestData.h	/^    bool keep_alive;$/;"	m	class:Request	access:private
+Request::linkTimer	requestData.h	/^    void linkTimer(std::shared_ptr<TimerNode> mtimer);$/;"	p	class:Request	access:public	signature:(std::shared_ptr<TimerNode> mtimer)
+Request::method	requestData.h	/^    int method;$/;"	m	class:Request	access:private
+Request::now_read_pos	requestData.h	/^    int now_read_pos;$/;"	m	class:Request	access:private
+Request::outBuffer	requestData.h	/^    std::string outBuffer;$/;"	m	class:Request	access:private
+Request::parse_Headers	requestData.h	/^    int parse_Headers();$/;"	p	class:Request	access:private	signature:()
+Request::parse_URL	requestData.h	/^    int parse_URL();$/;"	p	class:Request	access:private	signature:()
+Request::path	requestData.h	/^    std::string path;$/;"	m	class:Request	access:private
+Request::reset	requestData.h	/^    void reset();$/;"	p	class:Request	access:public	signature:()
+Request::seperateTimer	requestData.h	/^    void seperateTimer();$/;"	p	class:Request	access:public	signature:()
+Request::setFd	requestData.h	/^    void setFd(int _fd);$/;"	p	class:Request	access:public	signature:(int _fd)
+Request::state	requestData.h	/^    int state;$/;"	m	class:Request	access:private
+Request::timer	requestData.h	/^    std::weak_ptr<TimerNode> timer;$/;"	m	class:Request	access:private
+Request::~RequestData	requestData.h	/^    ~RequestData();$/;"	p	class:Request	access:public	signature:()
+RequestData	requestData.h	/^    RequestData();$/;"	p	class:Request	access:public	signature:()
+RequestData	requestData.h	/^    RequestData(int _epollfd, int _fd, std::string _path);$/;"	p	class:Request	access:public	signature:(int _epollfd, int _fd, std::string _path)
+SP_ReqData	epoll.h	/^    typedef std::shared_ptr<RequestData> SP_ReqData;$/;"	t	class:Epoll	access:public
+SP_ReqData	timer.h	/^    typedef std::shared_ptr<RequestData> SP_ReqData;$/;"	t	class:TimerManager	access:private
+SP_ReqData	timer.h	/^    typedef std::shared_ptr<RequestData> SP_ReqData;$/;"	t	class:TimerNode	access:private
+SP_TimerNode	timer.h	/^    typedef std::shared_ptr<TimerNode> SP_TimerNode;$/;"	t	class:TimerManager	access:private
+STATE_ANALYSIS	requestData.h	/^const int STATE_ANALYSIS = 4;$/;"	v
+STATE_FINISH	requestData.h	/^const int STATE_FINISH = 5;$/;"	v
+STATE_PARSE_HEADERS	requestData.h	/^const int STATE_PARSE_HEADERS = 2;$/;"	v
+STATE_PARSE_URL	requestData.h	/^const int STATE_PARSE_URL = 1;$/;"	v
+STATE_RECV_BODY	requestData.h	/^const int STATE_RECV_BODY = 3;$/;"	v
+ShutDownOption	threadpool.h	/^} ShutDownOption;$/;"	t	typeref:enum:__anon1
+THREADPOOL_GRACEFUL	threadpool.h	/^const int THREADPOOL_GRACEFUL = 1;$/;"	v
+THREADPOOL_INVALID	threadpool.h	/^const int THREADPOOL_INVALID = -1;$/;"	v
+THREADPOOL_LOCK_FAILURE	threadpool.h	/^const int THREADPOOL_LOCK_FAILURE = -2;$/;"	v
+THREADPOOL_QUEUE_FULL	threadpool.h	/^const int THREADPOOL_QUEUE_FULL = -3;$/;"	v
+THREADPOOL_SHUTDOWN	threadpool.h	/^const int THREADPOOL_SHUTDOWN = -4;$/;"	v
+THREADPOOL_THREAD_FAILURE	threadpool.h	/^const int THREADPOOL_THREAD_FAILURE = -5;$/;"	v
+TIMER_TIME_OUT	epoll.cpp	/^int TIMER_TIME_OUT = 500;$/;"	v
+ThreadPool	threadpool.h	/^class ThreadPool$/;"	c
+ThreadPool::count	threadpool.h	/^    static int count;$/;"	m	class:ThreadPool	access:private
+ThreadPool::head	threadpool.cpp	/^int ThreadPool::head = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::head	threadpool.h	/^    static int head;$/;"	m	class:ThreadPool	access:private
+ThreadPool::lock	threadpool.cpp	/^pthread_mutex_t ThreadPool::lock = PTHREAD_MUTEX_INITIALIZER;$/;"	m	class:ThreadPool	file:
+ThreadPool::lock	threadpool.h	/^    static pthread_mutex_t lock;$/;"	m	class:ThreadPool	access:private
+ThreadPool::next	threadpool.cpp	/^int ThreadPool::next = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::notify	threadpool.cpp	/^pthread_cond_t ThreadPool::notify = PTHREAD_COND_INITIALIZER;$/;"	m	class:ThreadPool	file:
+ThreadPool::notify	threadpool.h	/^    static pthread_cond_t notify;$/;"	m	class:ThreadPool	access:private
+ThreadPool::queue	threadpool.cpp	/^std::vector<ThreadPoolTask> ThreadPool::queue;$/;"	m	class:ThreadPool	file:
+ThreadPool::queue	threadpool.h	/^    static std::vector<ThreadPoolTask> queue;$/;"	m	class:ThreadPool	access:private
+ThreadPool::queue_size	threadpool.cpp	/^int ThreadPool::queue_size = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::queue_size	threadpool.h	/^    static int queue_size;$/;"	m	class:ThreadPool	access:private
+ThreadPool::shutdown	threadpool.cpp	/^int ThreadPool::shutdown = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::shutdown	threadpool.h	/^    static int shutdown;$/;"	m	class:ThreadPool	access:private
+ThreadPool::started	threadpool.cpp	/^int ThreadPool::started = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::started	threadpool.h	/^    static int started;$/;"	m	class:ThreadPool	access:private
+ThreadPool::tail	threadpool.cpp	/^int ThreadPool::tail = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::tail	threadpool.h	/^    static int tail;$/;"	m	class:ThreadPool	access:private
+ThreadPool::thread_count	threadpool.cpp	/^int ThreadPool::thread_count = 0;$/;"	m	class:ThreadPool	file:
+ThreadPool::thread_count	threadpool.h	/^    static int thread_count;$/;"	m	class:ThreadPool	access:private
+ThreadPool::threadpool_add	threadpool.cpp	/^int ThreadPool::threadpool_add(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun)$/;"	f	class:ThreadPool	signature:(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun)
+ThreadPool::threadpool_add	threadpool.h	/^    static int threadpool_add(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun = myHandler);$/;"	p	class:ThreadPool	access:public	signature:(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun = myHandler)
+ThreadPool::threadpool_create	threadpool.cpp	/^int ThreadPool::threadpool_create(int _thread_count, int _queue_size)$/;"	f	class:ThreadPool	signature:(int _thread_count, int _queue_size)
+ThreadPool::threadpool_create	threadpool.h	/^    static int threadpool_create(int _thread_count, int _queue_size);$/;"	p	class:ThreadPool	access:public	signature:(int _thread_count, int _queue_size)
+ThreadPool::threadpool_destroy	threadpool.cpp	/^int ThreadPool::threadpool_destroy(ShutDownOption shutdown_option)$/;"	f	class:ThreadPool	signature:(ShutDownOption shutdown_option)
+ThreadPool::threadpool_destroy	threadpool.h	/^    static int threadpool_destroy(ShutDownOption shutdown_option = graceful_shutdown);$/;"	p	class:ThreadPool	access:public	signature:(ShutDownOption shutdown_option = graceful_shutdown)
+ThreadPool::threadpool_free	threadpool.cpp	/^int ThreadPool::threadpool_free()$/;"	f	class:ThreadPool	signature:()
+ThreadPool::threadpool_free	threadpool.h	/^    static int threadpool_free();$/;"	p	class:ThreadPool	access:public	signature:()
+ThreadPool::threadpool_thread	threadpool.cpp	/^void *ThreadPool::threadpool_thread(void *args)$/;"	f	class:ThreadPool	signature:(void *args)
+ThreadPool::threadpool_thread	threadpool.h	/^    static void *threadpool_thread(void *args);$/;"	p	class:ThreadPool	access:public	signature:(void *args)
+ThreadPool::threads	threadpool.cpp	/^std::vector<pthread_t> ThreadPool::threads;$/;"	m	class:ThreadPool	file:
+ThreadPool::threads	threadpool.h	/^    static std::vector<pthread_t> threads;$/;"	m	class:ThreadPool	access:private
+ThreadPoolTask	threadpool.h	/^struct ThreadPoolTask$/;"	s
+ThreadPoolTask::args	threadpool.h	/^    std::shared_ptr<void> args;$/;"	m	struct:ThreadPoolTask	access:public
+ThreadPoolTask::fun	threadpool.h	/^    std::function<void(std::shared_ptr<void>)> fun;$/;"	m	struct:ThreadPoolTask	access:public
+TimerManager	timer.h	/^    TimerManager();$/;"	p	class:TimerManager	access:public	signature:()
+TimerManager	timer.h	/^class TimerManager$/;"	c
+TimerManager::SP_ReqData	timer.h	/^    typedef std::shared_ptr<RequestData> SP_ReqData;$/;"	t	class:TimerManager	access:private
+TimerManager::SP_TimerNode	timer.h	/^    typedef std::shared_ptr<TimerNode> SP_TimerNode;$/;"	t	class:TimerManager	access:private
+TimerManager::TimerManager	timer.h	/^    TimerManager();$/;"	p	class:TimerManager	access:public	signature:()
+TimerManager::TimerNodeQueue	timer.h	/^    std::priority_queue<SP_TimerNode, std::deque<SP_TimerNode>, timerCmp> TimerNodeQueue;$/;"	m	class:TimerManager	access:private
+TimerManager::addTimer	timer.h	/^    void addTimer(SP_ReqData request_data, int timeout);$/;"	p	class:TimerManager	access:public	signature:(SP_ReqData request_data, int timeout)
+TimerManager::addTimer	timer.h	/^    void addTimer(SP_TimerNode timer_node);$/;"	p	class:TimerManager	access:public	signature:(SP_TimerNode timer_node)
+TimerManager::handle_expired_event	timer.h	/^    void handle_expired_event();$/;"	p	class:TimerManager	access:public	signature:()
+TimerManager::lock	timer.h	/^    MutexLock lock;$/;"	m	class:TimerManager	access:private
+TimerManager::~TimerManager	timer.h	/^    ~TimerManager();$/;"	p	class:TimerManager	access:public	signature:()
+TimerNode	timer.h	/^    TimerNode(SP_ReqData _request_data, int timeout);$/;"	p	class:TimerNode	access:public	signature:(SP_ReqData _request_data, int timeout)
+TimerNode	timer.h	/^class TimerNode$/;"	c
+TimerNode::SP_ReqData	timer.h	/^    typedef std::shared_ptr<RequestData> SP_ReqData;$/;"	t	class:TimerNode	access:private
+TimerNode::TimerNode	timer.h	/^    TimerNode(SP_ReqData _request_data, int timeout);$/;"	p	class:TimerNode	access:public	signature:(SP_ReqData _request_data, int timeout)
+TimerNode::clearReq	timer.h	/^    void clearReq();$/;"	p	class:TimerNode	access:public	signature:()
+TimerNode::deleted	timer.h	/^    bool deleted;$/;"	m	class:TimerNode	access:private
+TimerNode::expired_time	timer.h	/^    size_t expired_time;$/;"	m	class:TimerNode	access:private
+TimerNode::getExpTime	timer.h	/^    size_t getExpTime() const;$/;"	p	class:TimerNode	access:public	signature:() const
+TimerNode::isDeleted	timer.h	/^    bool isDeleted() const;$/;"	p	class:TimerNode	access:public	signature:() const
+TimerNode::isvalid	timer.h	/^    bool isvalid();$/;"	p	class:TimerNode	access:public	signature:()
+TimerNode::request_data	timer.h	/^    SP_ReqData request_data;$/;"	m	class:TimerNode	access:private
+TimerNode::setDeleted	timer.h	/^    void setDeleted();$/;"	p	class:TimerNode	access:public	signature:()
+TimerNode::update	timer.h	/^    void update(int timeout);$/;"	p	class:TimerNode	access:public	signature:(int timeout)
+TimerNode::~TimerNode	timer.h	/^    ~TimerNode();$/;"	p	class:TimerNode	access:public	signature:()
+TimerNodeQueue	timer.h	/^    std::priority_queue<SP_TimerNode, std::deque<SP_TimerNode>, timerCmp> TimerNodeQueue;$/;"	m	class:TimerManager	access:private
+__UTIL_H_	util.h	2;"	d
+acceptConnection	epoll.h	/^    static void acceptConnection(int listen_fd, int epoll_fd, const std::string path);$/;"	p	class:Epoll	access:public	signature:(int listen_fd, int epoll_fd, const std::string path)
+addTimer	timer.h	/^    void addTimer(SP_ReqData request_data, int timeout);$/;"	p	class:TimerManager	access:public	signature:(SP_ReqData request_data, int timeout)
+addTimer	timer.h	/^    void addTimer(SP_TimerNode timer_node);$/;"	p	class:TimerManager	access:public	signature:(SP_TimerNode timer_node)
+add_timer	epoll.h	/^    static void add_timer(SP_ReqData request_data, int timeout);$/;"	p	class:Epoll	access:public	signature:(SP_ReqData request_data, int timeout)
+analysisRequest	requestData.h	/^    int analysisRequest();$/;"	p	class:Request	access:private	signature:()
+args	threadpool.h	/^    std::shared_ptr<void> args;$/;"	m	struct:ThreadPoolTask	access:public
+canRead	requestData.h	/^    bool canRead();$/;"	p	class:Request	access:public	signature:()
+canWrite	requestData.h	/^    bool canWrite();$/;"	p	class:Request	access:public	signature:()
+clearReq	timer.h	/^    void clearReq();$/;"	p	class:TimerNode	access:public	signature:()
+count	threadpool.h	/^    static int count;$/;"	m	class:ThreadPool	access:private
+deleted	timer.h	/^    bool deleted;$/;"	m	class:TimerNode	access:private
+disableReadAndWrite	requestData.h	/^    void disableReadAndWrite();$/;"	p	class:Request	access:public	signature:()
+enableRead	requestData.h	/^    void enableRead();$/;"	p	class:Request	access:public	signature:()
+enableWrite	requestData.h	/^    void enableWrite();$/;"	p	class:Request	access:public	signature:()
+epoll_add	epoll.h	/^    static int epoll_add(int fd, SP_ReqData request, __uint32_t events);$/;"	p	class:Epoll	access:public	signature:(int fd, SP_ReqData request, __uint32_t events)
+epoll_del	epoll.h	/^    static int epoll_del(int fd, __uint32_t events = (EPOLIN | EPOLLET | EPOLLONESHOT));$/;"	p	class:Epoll	access:public	signature:(int fd, __uint32_t events = (EPOLIN | EPOLLET | EPOLLONESHOT))
+epoll_fd	epoll.cpp	/^int Epoll::epoll_fd = 0;$/;"	m	class:Epoll	file:
+epoll_fd	epoll.h	/^    static int epoll_fd;$/;"	m	class:Epoll	access:private
+epoll_init	epoll.h	/^    static int epoll_init(int maxevents, int listen_num);$/;"	p	class:Epoll	access:public	signature:(int maxevents, int listen_num)
+epoll_mod	epoll.h	/^    static int epoll_mod(int fd, SP_ReqData request, __uint32_t events);$/;"	p	class:Epoll	access:public	signature:(int fd, SP_ReqData request, __uint32_t events)
+epollfd	requestData.h	/^    int epollfd;$/;"	m	class:Request	access:private
+error	requestData.h	/^    bool error;$/;"	m	class:Request	access:private
+events	epoll.cpp	/^struct epoll_event *Epoll::events;$/;"	m	class:Epoll	typeref:struct:Epoll::	file:
+events	epoll.h	/^    static epoll_even *events;$/;"	m	class:Epoll	access:private
+events	requestData.h	/^    __uint32_t events;$/;"	m	class:Request	access:private
+expired_time	timer.h	/^    size_t expired_time;$/;"	m	class:TimerNode	access:private
+fd	requestData.h	/^    int fd;$/;"	m	class:Request	access:private
+fd2req	epoll.cpp	/^Epoll::SP_ReqData Epoll::fd2req[MAXFDS];$/;"	m	class:Epoll	file:
+fd2req	epoll.h	/^    static SP_ReqData fd2req[MAXFDS];$/;"	m	class:Epoll	access:private
+file_name	requestData.h	/^    std:: sting file_name;$/;"	m	class:Request	access:private
+fun	threadpool.h	/^    std::function<void(std::shared_ptr<void>)> fun;$/;"	m	struct:ThreadPoolTask	access:public
+get	base/mutexLock.hpp	/^    pthread_mutex_t *get()$/;"	f	class:MutexLock	access:public	signature:()
+getEventsRequest	epoll.h	/^    static std::vector<SP_ReqData> getEventsRequest(int listen_fd, int events_num, const std::string path);$/;"	p	class:Epoll	access:public	signature:(int listen_fd, int events_num, const std::string path)
+getExpTime	timer.h	/^    size_t getExpTime() const;$/;"	p	class:TimerNode	access:public	signature:() const
+getFd	requestData.h	/^    int getFd();$/;"	p	class:Request	access:public	signature:()
+getMime	requestData.h	/^    static std::string getMime(const std::string &suffix);$/;"	p	class:MimeType	access:public	signature:(const std::string &suffix)
+graceful_shutdown	threadpool.h	/^    graceful_shutdown  = 2$/;"	e	enum:__anon1
+h_CR	requestData.h	/^    h_CR,$/;"	e	enum:HeaderState
+h_LF	requestData.h	/^    h_LF,$/;"	e	enum:HeaderState
+h_colon	requestData.h	/^    h_colon,$/;"	e	enum:HeaderState
+h_end_CR	requestData.h	/^    h_end_CR,$/;"	e	enum:HeaderState
+h_end_LF	requestData.h	/^    h_end_LF$/;"	e	enum:HeaderState
+h_key	requestData.h	/^    h_key,$/;"	e	enum:HeaderState
+h_spaces_after_colon	requestData.h	/^    h_spaces_after_colon,$/;"	e	enum:HeaderState
+h_start	requestData.h	/^    h_start = 0,$/;"	e	enum:HeaderState
+h_value	requestData.h	/^    h_value,$/;"	e	enum:HeaderState
+handleConn	requestData.h	/^    void handleConn();$/;"	p	class:Request	access:public	signature:()
+handleError	requestData.h	/^    void handleError(int fd, int err_num, std::string short_msg);$/;"	p	class:Request	access:public	signature:(int fd, int err_num, std::string short_msg)
+handleRead	requestData.h	/^    void handleRead();$/;"	p	class:Request	access:public	signature:()
+handleWrite	requestData.h	/^    void handleWrite();$/;"	p	class:Request	access:public	signature:()
+handle_expired_event	timer.h	/^    void handle_expired_event();$/;"	p	class:TimerManager	access:public	signature:()
+handle_for_sigpipe	util.cpp	/^void handle_for_sigpipe(){$/;"	f	signature:()
+handle_for_sigpipe	util.h	/^void handle_for_sigpipe();$/;"	p	signature:()
+head	threadpool.cpp	/^int ThreadPool::head = 0;$/;"	m	class:ThreadPool	file:
+head	threadpool.h	/^    static int head;$/;"	m	class:ThreadPool	access:private
+headers	requestData.h	/^    std::unordered_map<std::string, std::string> headers;$/;"	m	class:Request	access:private
+immediate_shutdown	threadpool.h	/^    immediate_shutdown = 1,$/;"	e	enum:__anon1
+inBuffer	requestData.h	/^    std::string inBuffer;$/;"	m	class:Request	access:private
+init	requestData.h	/^    static void init();$/;"	p	class:MimeType	access:private	signature:()
+isAbleRead	requestData.h	/^    bool isAbleRead;$/;"	m	class:Request	access:private
+isAbleWrite	requestData.h	/^    bool isAbleWrite;$/;"	m	class:Request	access:private
+isDeleted	timer.h	/^    bool isDeleted() const;$/;"	p	class:TimerNode	access:public	signature:() const
+isfinish	requestData.h	/^    bool isfinish;$/;"	m	class:Request	access:private
+isvalid	timer.h	/^    bool isvalid();$/;"	p	class:TimerNode	access:public	signature:()
+keep_alive	requestData.h	/^    bool keep_alive;$/;"	m	class:Request	access:private
+linkTimer	requestData.h	/^    void linkTimer(std::shared_ptr<TimerNode> mtimer);$/;"	p	class:Request	access:public	signature:(std::shared_ptr<TimerNode> mtimer)
+lock	base/mutexLock.hpp	/^    void lock()$/;"	f	class:MutexLock	access:public	signature:()
+lock	threadpool.cpp	/^pthread_mutex_t ThreadPool::lock = PTHREAD_MUTEX_INITIALIZER;$/;"	m	class:ThreadPool	file:
+lock	threadpool.h	/^    static pthread_mutex_t lock;$/;"	m	class:ThreadPool	access:private
+lock	timer.h	/^    MutexLock lock;$/;"	m	class:TimerManager	access:private
+main	main.cpp	/^int main()$/;"	f	signature:()
+method	requestData.h	/^    int method;$/;"	m	class:Request	access:private
+mime	requestData.h	/^    static std::unordered_map<std::string, std::string> mime;$/;"	m	class:MimeType	access:private
+mutex	base/mutexLock.hpp	/^    MutexLock &mutex;$/;"	m	class:MutexLockGuard	access:private
+mutex	base/mutexLock.hpp	/^    pthread_mutex_t mutex;$/;"	m	class:MutexLock	access:private
+myHandler	threadpool.cpp	/^void myHandler(std::shared_ptr<void> req)$/;"	f	signature:(std::shared_ptr<void> req)
+myHandler	threadpool.h	/^void myHandler(std::shared_ptr<void> req);$/;"	p	signature:(std::shared_ptr<void> req)
+my_epoll_wait	epoll.h	/^    static void my_epoll_wait(int listen_fd, int max_evens, int timeout);$/;"	p	class:Epoll	access:public	signature:(int listen_fd, int max_evens, int timeout)
+next	threadpool.cpp	/^int ThreadPool::next = 0;$/;"	m	class:ThreadPool	file:
+noncopyable	base/nocopyable.hpp	/^    noncopyable() {}$/;"	f	class:noncopyable	access:protected	signature:()
+noncopyable	base/nocopyable.hpp	/^    noncopyable(const noncopyable&);$/;"	p	class:noncopyable	access:private	signature:(const noncopyable&)
+noncopyable	base/nocopyable.hpp	/^class noncopyable$/;"	c
+noncopyable::noncopyable	base/nocopyable.hpp	/^    noncopyable() {}$/;"	f	class:noncopyable	access:protected	signature:()
+noncopyable::noncopyable	base/nocopyable.hpp	/^    noncopyable(const noncopyable&);$/;"	p	class:noncopyable	access:private	signature:(const noncopyable&)
+noncopyable::operator =	base/nocopyable.hpp	/^    const noncopyable& operator=(const noncopyable&);$/;"	p	class:noncopyable	access:private	signature:(const noncopyable&)
+noncopyable::~noncopyable	base/nocopyable.hpp	/^    ~noncopyable() {}$/;"	f	class:noncopyable	access:protected	signature:()
+notify	threadpool.cpp	/^pthread_cond_t ThreadPool::notify = PTHREAD_COND_INITIALIZER;$/;"	m	class:ThreadPool	file:
+notify	threadpool.h	/^    static pthread_cond_t notify;$/;"	m	class:ThreadPool	access:private
+now_read_pos	requestData.h	/^    int now_read_pos;$/;"	m	class:Request	access:private
+obj	makefile	/^obj		:= $(patsubst %.c,%.o, $(patsubst %.cpp,%.c, $(source)))$/;"	m
+once_control	requestData.h	/^    static pthread_once_t once_control;$/;"	m	class:MimeType	access:private
+operator ()	timer.h	/^    bool operator()(std::shared_ptr<TimerNode>& a,std::shared_ptr<TimerNode>& b) const$/;"	f	struct:timerCmp	access:public	signature:(std::shared_ptr<TimerNode>& a,std::shared_ptr<TimerNode>& b) const
+operator =	base/nocopyable.hpp	/^    const noncopyable& operator=(const noncopyable&);$/;"	p	class:noncopyable	access:private	signature:(const noncopyable&)
+outBuffer	requestData.h	/^    std::string outBuffer;$/;"	m	class:Request	access:private
+parse_Headers	requestData.h	/^    int parse_Headers();$/;"	p	class:Request	access:private	signature:()
+parse_URL	requestData.h	/^    int parse_URL();$/;"	p	class:Request	access:private	signature:()
+path	requestData.h	/^    std::string path;$/;"	m	class:Request	access:private
+queue	threadpool.cpp	/^std::vector<ThreadPoolTask> ThreadPool::queue;$/;"	m	class:ThreadPool	file:
+queue	threadpool.h	/^    static std::vector<ThreadPoolTask> queue;$/;"	m	class:ThreadPool	access:private
+queue_size	threadpool.cpp	/^int ThreadPool::queue_size = 0;$/;"	m	class:ThreadPool	file:
+queue_size	threadpool.h	/^    static int queue_size;$/;"	m	class:ThreadPool	access:private
+readn	util.cpp	/^ssize_t readn(int fd, void *buff, size_t n){$/;"	f	signature:(int fd, void *buff, size_t n)
+readn	util.h	/^ssize_t readn(int fd, void *buff, size_t n);$/;"	p	signature:(int fd, void *buff, size_t n)
+request_data	timer.h	/^    SP_ReqData request_data;$/;"	m	class:TimerNode	access:private
+reset	requestData.h	/^    void reset();$/;"	p	class:Request	access:public	signature:()
+seperateTimer	requestData.h	/^    void seperateTimer();$/;"	p	class:Request	access:public	signature:()
+setDeleted	timer.h	/^    void setDeleted();$/;"	p	class:TimerNode	access:public	signature:()
+setFd	requestData.h	/^    void setFd(int _fd);$/;"	p	class:Request	access:public	signature:(int _fd)
+setSocketNonBlocking	util.cpp	/^int setSocketNonBlocking(int fd){$/;"	f	signature:(int fd)
+setSocketNonBlocking	util.h	/^int setSocketNonBlocking(int fd);$/;"	p	signature:(int fd)
+shutdown	threadpool.cpp	/^int ThreadPool::shutdown = 0;$/;"	m	class:ThreadPool	file:
+shutdown	threadpool.h	/^    static int shutdown;$/;"	m	class:ThreadPool	access:private
+socket_bind_listen	main.cpp	/^int socket_bind_listen(int port){$/;"	f	signature:(int port)
+source	makefile	/^source  := $(wildcard *.cpp)$/;"	m
+started	threadpool.cpp	/^int ThreadPool::started = 0;$/;"	m	class:ThreadPool	file:
+started	threadpool.h	/^    static int started;$/;"	m	class:ThreadPool	access:private
+state	requestData.h	/^    int state;$/;"	m	class:Request	access:private
+tail	threadpool.cpp	/^int ThreadPool::tail = 0;$/;"	m	class:ThreadPool	file:
+tail	threadpool.h	/^    static int tail;$/;"	m	class:ThreadPool	access:private
+thread_count	threadpool.cpp	/^int ThreadPool::thread_count = 0;$/;"	m	class:ThreadPool	file:
+thread_count	threadpool.h	/^    static int thread_count;$/;"	m	class:ThreadPool	access:private
+threadpool_add	threadpool.cpp	/^int ThreadPool::threadpool_add(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun)$/;"	f	class:ThreadPool	signature:(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun)
+threadpool_add	threadpool.h	/^    static int threadpool_add(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun = myHandler);$/;"	p	class:ThreadPool	access:public	signature:(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun = myHandler)
+threadpool_create	threadpool.cpp	/^int ThreadPool::threadpool_create(int _thread_count, int _queue_size)$/;"	f	class:ThreadPool	signature:(int _thread_count, int _queue_size)
+threadpool_create	threadpool.h	/^    static int threadpool_create(int _thread_count, int _queue_size);$/;"	p	class:ThreadPool	access:public	signature:(int _thread_count, int _queue_size)
+threadpool_destroy	threadpool.cpp	/^int ThreadPool::threadpool_destroy(ShutDownOption shutdown_option)$/;"	f	class:ThreadPool	signature:(ShutDownOption shutdown_option)
+threadpool_destroy	threadpool.h	/^    static int threadpool_destroy(ShutDownOption shutdown_option = graceful_shutdown);$/;"	p	class:ThreadPool	access:public	signature:(ShutDownOption shutdown_option = graceful_shutdown)
+threadpool_free	threadpool.cpp	/^int ThreadPool::threadpool_free()$/;"	f	class:ThreadPool	signature:()
+threadpool_free	threadpool.h	/^    static int threadpool_free();$/;"	p	class:ThreadPool	access:public	signature:()
+threadpool_thread	threadpool.cpp	/^void *ThreadPool::threadpool_thread(void *args)$/;"	f	class:ThreadPool	signature:(void *args)
+threadpool_thread	threadpool.h	/^    static void *threadpool_thread(void *args);$/;"	p	class:ThreadPool	access:public	signature:(void *args)
+threads	threadpool.cpp	/^std::vector<pthread_t> ThreadPool::threads;$/;"	m	class:ThreadPool	file:
+threads	threadpool.h	/^    static std::vector<pthread_t> threads;$/;"	m	class:ThreadPool	access:private
+timer	requestData.h	/^    std::weak_ptr<TimerNode> timer;$/;"	m	class:Request	access:private
+timerCmp	timer.h	/^struct timerCmp$/;"	s
+timerCmp::operator ()	timer.h	/^    bool operator()(std::shared_ptr<TimerNode>& a,std::shared_ptr<TimerNode>& b) const$/;"	f	struct:timerCmp	access:public	signature:(std::shared_ptr<TimerNode>& a,std::shared_ptr<TimerNode>& b) const
+timer_manager	epoll.h	/^    static TimerManager timer_manager;$/;"	m	class:Epoll	access:private
+unlock	base/mutexLock.hpp	/^    void unlock()$/;"	f	class:MutexLock	access:public	signature:()
+update	timer.h	/^    void update(int timeout);$/;"	p	class:TimerNode	access:public	signature:(int timeout)
+writen	util.cpp	/^ssize_t writen(int fd, void *buff, size_t n){$/;"	f	signature:(int fd, void *buff, size_t n)
+writen	util.h	/^ssize_t writen(int fd, void *buff, size_t n);$/;"	p	signature:(int fd, void *buff, size_t n)
+~MutexLock	base/mutexLock.hpp	/^    ~MutexLock()$/;"	f	class:MutexLock	access:public	signature:()
+~MutexLockGuard	base/mutexLock.hpp	/^    ~MutexLockGuard()$/;"	f	class:MutexLockGuard	access:public	signature:()
+~RequestData	requestData.h	/^    ~RequestData();$/;"	p	class:Request	access:public	signature:()
+~TimerManager	timer.h	/^    ~TimerManager();$/;"	p	class:TimerManager	access:public	signature:()
+~TimerNode	timer.h	/^    ~TimerNode();$/;"	p	class:TimerNode	access:public	signature:()
+~noncopyable	base/nocopyable.hpp	/^    ~noncopyable() {}$/;"	f	class:noncopyable	access:protected	signature:()
