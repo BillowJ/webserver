@@ -14,6 +14,9 @@ epoll.o : epoll.cpp epoll.h
 	$(CC) -c epoll.cpp $(CXXFLAGS) $(LIBS)
 util.o : util.h util.cpp
 	$(CC) -c util.cpp $(CXXFLAGS) $(LIBS)
+RequestData.o : RequestData.cpp Request.h
+	$(CC) -c Request.cpp $(CXXFLAGS) $(LIBS)
+
 
 #$(obj): $(source)
 

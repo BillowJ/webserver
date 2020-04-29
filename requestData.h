@@ -69,7 +69,7 @@ enum HeaderState
     h_end_LF
 };
 
-class TimerNode;
+class Timer;
 
 class RequestData : public std::enable_shared_from_this<RequestData>
 {
@@ -88,10 +88,11 @@ private:
     std::string file_name;
     int now_read_pos;
     int state;
+    int h_state;
     bool isfinish;
     bool keep_alive;
     std::unordered_map<std::string, std::string> headers;
-    std::weak_ptr<TimerNode> timer;
+    std::weak_ptr<Timer> timer;
 
     bool isAbleRead;
     bool isAbleWrite;
@@ -106,7 +107,7 @@ public:
     RequestData();
     RequestData(int _epollfd, int _fd, std::string _path);
     ~RequestData();
-    void linkTimer(std::shared_ptr<TimerNode> mtimer);
+    void linkTimer(std::shared_ptr<Timer> mtimer);
     void reset();
     void seperateTimer();
     int getFd();

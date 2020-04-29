@@ -9,7 +9,7 @@
 
 class RequestData;
 
-class TimerNode
+class Timer
 {
     typedef std::shared_ptr<RequestData> SP_ReqData;
 private:
@@ -17,10 +17,8 @@ private:
     size_t expired_time;
     SP_ReqData request_data;
 public:
-    TimerNode(SP_ReqData _request_data, int timeout);
-    ~TimerNode();
-    //更新定时器
-    void update(int timeout);
+    Timer(SP_ReqData _request_data, int timeout);
+    ~Timer();
     bool isvalid();
     void clearReq();
     void setDeleted();
@@ -31,7 +29,7 @@ public:
 
 struct timerCmp
 {
-    bool operator()(std::shared_ptr<TimerNode>& a,std::shared_ptr<TimerNode>& b) const
+    bool operator()(std::shared_ptr<Timer>& a,std::shared_ptr<Timer>& b) const
     {
         return a -> getExpTime() > b -> getExpTime();
     }
@@ -41,14 +39,13 @@ struct timerCmp
 class TimerManager
 {
     typedef std::shared_ptr<RequestData> SP_ReqData;
-    typedef std::shared_ptr<TimerNode> SP_TimerNode;
+    typedef std::shared_ptr<Timer> SP_Timer;
 private:
-    std::priority_queue<SP_TimerNode, std::deque<SP_TimerNode>, timerCmp> TimerNodeQueue;
+    std::priority_queue<SP_Timer, std::deque<SP_Timer>, timerCmp> TimerQueue;
     MutexLock lock;
 public:
     TimerManager();
     ~TimerManager();
     void addTimer(SP_ReqData request_data, int timeout);
-    void addTimer(SP_TimerNode timer_node);
     void handle_expired_event();
 };
