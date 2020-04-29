@@ -1,6 +1,7 @@
 #include "timer.h"
-#include "sys/timei.h"
-#include <iostrea>
+#include "epoll.h"
+#include "sys/time.h"
+#include <iostream>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ Timer::Timer(SP_ReqData _req, int _timeout) :
 {
     struct timeval now;
     gettimeofday(&now, NULL);
-    expired_time = _timeout + (now.tv_sec*1000 + now.tv_msec/1000);
+    expired_time = _timeout + (now.tv_sec*1000 + now.tv_usec/1000);
 }
 
 Timer::~Timer(){
@@ -20,10 +21,12 @@ Timer::~Timer(){
 }
 bool Timer::isvalid(){
     struct timeval now;
-    getnowofday(&now, NULL)
-    if(expired_time > (now.tv_sec*1000 + now.tv_msec/1000)){
+    gettimeofday(&now, NULL);
+    if(expired_time > (now.tv_sec*1000 + now.tv_usec/1000)){
         return true;
-    }else{
+    }
+    else
+    {
         this -> setDeleted();
         return false;
     }
@@ -60,7 +63,7 @@ TimerManager::~TimerManager()
 {
 }
 
-TimerManager::addTimer(TimerManager::SP_ReqData request_data, int timeout)
+void TimerManager::addTimer(TimerManager::SP_ReqData request_data, int timeout)
 {
     shared_ptr<Timer> timer = std::make_shared<Timer>(request_data, timeout);
     {
@@ -77,11 +80,11 @@ void TimerManager::handle_expired_event()
     while(!TimerQueue.empty())
     {
         SP_Timer tmp = TimerQueue.top();
-        if(tmp -> isvalid() == false)
+        if(tmp -> isDeleted()) //分离后被设置为删除
         {
             TimerQueue.pop();
         }
-        else if(tmp -> isDeleted())
+        else if(tmp -> isvalid() == false) //超时
         {
             TimerQueue.pop();
         }

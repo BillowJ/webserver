@@ -13,14 +13,14 @@ std::unordered_map<std::string, std::string> MimeType::mime;
 
 void MimeType::init()
 {
-    mime['.html'] = "text/html";
-    mime['.jpg'] = "image/jpeg";
-    mime['.png'] = "image/png";
-    mime['.gif'] = "image/gif"
-    mime['.txt'] = "text/plain";
-    mime['default'] = "text/html";
-    mime['.ico'] = "application/x-ico";
-    mime['.gz'] = "application/x-ico";
+    mime[".html"] = "text/html";
+    mime[".jpg"] = "image/jpeg";
+    mime[".png"] = "image/png";
+    mime[".gif"] = "image/gif";
+    mime[".txt"] = "text/plain";
+    mime[".ico"] = "application/x-ico";
+    mime[".gz"] = "application/x-ico";
+    mime["default"] = "text/html";
 }
 
 std::string MimeType::getMime(const std::string& suffix)
@@ -69,7 +69,7 @@ RequestData::~RequestData()
     close(fd);
 }
 
-void RequestData::linkTimer(shared_ptr<TimerNode> _timer)
+void RequestData::linkTimer(shared_ptr<Timer> _timer)
 {
     timer = _timer;
 }
@@ -95,7 +95,7 @@ void RequestData::reset()
     headers.clear();
     if(timer.lock())
     {
-        shared_ptr<TimerNode> my_timer(timer.lock());
+        shared_ptr<Timer> my_timer(timer.lock());
         my_timer -> clearReq();
         timer.reset(); //分离
     }
@@ -105,7 +105,7 @@ void RequestData::seperateTimer()
 {
     if(timer.lock())
     {
-        shared_ptr<TimerNode> my_timer(timer.lock());
+        shared_ptr<Timer> my_timer(timer.lock());
         my_timer -> clearReq();
         timer.reset();
     }
