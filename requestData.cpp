@@ -18,7 +18,6 @@ void MimeType::init()
     mime[".png"] = "image/png";
     mime[".gif"] = "image/gif";
     mime[".txt"] = "text/plain";
-    mime[".ico"] = "application/x-ico";
     mime[".gz"] = "application/x-ico";
     mime["default"] = "text/html";
 }
@@ -114,26 +113,37 @@ void RequestData::seperateTimer()
 void RequestData::handleRead()
 {
 
-    if(!errno)
     do
     {
         int read_sum = readn(fd, inBuffer);
         //read errno
         if(read_sum < 0){
             perror("readn error!");
-            errno = true;
+            error = true;
             handleError(fd, 400, "Bad Request");
             break;
         }
         else if(read_sum == 0){
-            errno = true;
+            error = true;
             break;
         }
         //success ready to next
         if(state == STATE_PARSE_URL)
         {
+            int flag = this -> parse_URL();
+            if(flag == PARSE_URI_AGAIN)
+                break;
+            else if(flag == PARSE_URI_ERROR)
+            {
+                perror("parse url error!");
+                error = true;
+                handleError(fd, 400, "Bad Request");
+                break;
+            }
+            else
+                //parse url finish
+                state = STATE_PARSE_HEADERS;
 
-            
         }
         if(state == STATE_PARSE_HEADERS)
         {
@@ -145,7 +155,7 @@ void RequestData::handleRead()
         }
 
     } while(false);
-    if(errno){
+    if(error){
         //再次监听读
         events |= EPOLLIN;
 
@@ -180,7 +190,7 @@ void RequestData::handleWrite()
     {
         if(writen(fd, outBuffer) < 0)
         {
-            perror("writen errno!");
+            perror("writen falied!");
             events = 0;
             error = true;
         }
@@ -245,7 +255,75 @@ int RequestData::parse_URL()
 {
 
     string &str = inBuffer;
+    int pos = str.find('\r', now_read_pos);
+    //没解析到内容
+    if(pos < 0){
+        state = PARSE_URI_AGAIN;
+    }
+    //"GET /index HTTP/1.1
+    string _line = str.substr(0, pos);
+    if(str.size() > pos+1)
+        str.substr(pos+1);
+    else
+        str.clear(); //finish
+    pos = _line.find("GET");
+    if(pos == -1)
+    {
+        pos = _line.find("POST");
+        if(pos == -1)
+            return PARSE_URI_ERROR;
+        else
+            method = METHOD_POST;
+    }
+    else
+    {
+        method = METHOD_GET;
+    }
+    pos = _line.find("/", pos);
+    if(pos == -1)
+        return PARSE_URI_ERROR;
+    else
+    {   
+        //filename
+        int _pos = _line.find(' ', pos);
+        if(_pos == -1)
+            return PARSE_URI_ERROR;
+        else
+        {
+            if(_pos - pos > 1){
+                file_name = _line.substr(pos + 1, _pos - (pos + 1));
+                int _pos = _line.find('?');
+                if(_pos != -1)
+                    file_name = file_name.substr(0, _pos-1);
+            }
+            else file_name = "index.html";
+        }
+        pos = _pos; // ' '
+    }
+    
+    //"GET /index HTTP/1.1 
+    //prase http version
+    pos = _line.find('/', pos);
+    if(pos == -1)
+    {
+        return PARSE_URI_ERROR;
+    }
+    else
+    {
+        string ver = _line.substr(pos+1, pos+3);
+        if(ver == "1.0")
+            HTTPversion = HTTP_10;
+        else if(ver == "1.1")
+            HTTPversion = HTTP_11;
+        else
+            return PARSE_URI_ERROR;
+    }
+    
+    return PARSE_URI_SUCCESS;
+    
 }
+
+
 
 int RequestData::parse_Headers()
 {
