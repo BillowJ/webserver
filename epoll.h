@@ -29,7 +29,6 @@ private:
     static SP_ReqData fd2req[MAXFDS];
 
     static TimerManager timer_manager;
-
 public:
     static int epoll_init(int maxevents, int listen_num);
     static int epoll_add(int fd, SP_ReqData request, __uint32_t events);

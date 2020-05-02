@@ -97,8 +97,9 @@ int main()
         perror("set socket non block failed");
         return 1;
     }
-    shared_ptr<RequestData> request(new RequestData());
+    shared_ptr<RequestData> request = make_shared<RequestData>();
     request->setFd(listen_fd);
+    cout << listen_fd;
     if (Epoll::epoll_add(listen_fd, request, EPOLLIN | EPOLLET) < 0)
     {
         perror("epoll add error");
@@ -107,7 +108,6 @@ int main()
     
     while (true)
     {
-        //sleep(10);
         Epoll::my_epoll_wait(listen_fd, MAXEVENTS, -1);
         
         //ThreadPool::threadpool_destroy();

@@ -2,8 +2,12 @@
 #include "epoll.h"
 #include "sys/time.h"
 #include <iostream>
+#include <string>
+#include <unordered_map>
+#include <deque>
 
 using namespace std;
+
 
 Timer::Timer(SP_ReqData _req, int _timeout) : 
     request_data(_req),
@@ -38,6 +42,12 @@ void Timer::setDeleted()
     deleted = true;
     return;
 }
+
+bool Timer::isDeleted() const
+{
+    return deleted;
+}
+
 
 void Timer::clearReq()
 {

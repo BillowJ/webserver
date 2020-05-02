@@ -21,20 +21,24 @@ Epoll::SP_ReqData Epoll::fd2req[MAXFDS];
 int Epoll::epoll_fd = 0;
 const std::string Epoll::PATH = "/";
 
+TimerManager Epoll::timer_manager;
+
+
 //初始化
 int Epoll::epoll_init(int maxevents, int listen_num)
 {
-    int epoll_fd = epoll_create(listen_num + 1);
+    epoll_fd = epoll_create(listen_num + 1);
     if(epoll_fd == -1){
         return -1;
     }
     events = new epoll_event[maxevents];
-    return epoll_fd;
+    return 0;
 }
 
 // 注册新描述符
 int Epoll::epoll_add(int fd, SP_ReqData request, __uint32_t events)
 {
+    //cout << "add...." << endl;
     struct epoll_event event;
     event.data.fd = fd;//结构体指针
     event.events = events;
@@ -127,7 +131,10 @@ void Epoll::acceptConnection(int listen_fd, int epoll_fd, const std::string path
             return;
         }
 
-        SP_ReqData req_info(new RequestData(epoll_fd, accept_fd, path));
+        //SP_ReqData req_info(new RequestData(epoll_fd, accept_fd, path));
+        cout << "epoll_fd: " << epoll_fd << "accept_fd: " <<accept_fd << "path: " << path << endl;
+        SP_ReqData req_info = make_shared<RequestData>(epoll_fd, accept_fd, path);
+        cout << req_info << endl;
 
         // 文件描述符可以读，边缘触发(Edge Triggered)模式，保证一个socket连接在任一时刻只被一个线程处理
         __uint32_t _epo_event = EPOLLIN | EPOLLET | EPOLLONESHOT;
@@ -158,6 +165,7 @@ std::vector<std::shared_ptr<RequestData>> Epoll::getEventsRequest(int listen_fd,
         }
         else
         {
+            cout << "epoll -> getEventRequest" << endl;
             if((events[i].events& EPOLLERR) || (events[i].events & EPOLLHUP))
             {
                 printf("error event\n");
@@ -167,14 +175,20 @@ std::vector<std::shared_ptr<RequestData>> Epoll::getEventsRequest(int listen_fd,
             }
 
             SP_ReqData cur_req = fd2req[fd];
+            cout << "cur_req: " << cur_req << endl;
 
             if(cur_req)
             {
                 if((events[i].events & EPOLLIN) || (events[i].events & EPOLLPRI))
+                {
+                    cout << "enable Read" <<endl;
                     cur_req -> enableRead();
+                }
                 else
+                {
+                    cout << "enable Write" << endl;
                     cur_req -> enableWrite();
-
+                }
                 cur_req -> seperateTimer();
                 req_data.push_back(cur_req);
                 fd2req[fd].reset();

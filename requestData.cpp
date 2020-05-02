@@ -1,11 +1,17 @@
 #include "requestData.h"
 #include "util.h"
 #include "epoll.h"
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
-#include <vector>
+#include <cstdlib>
+#include <unistd.h>
+#include <queue>
 #include <iostream>
-
-
+#include <string>
 using namespace std;
 
 pthread_once_t MimeType::once_control = PTHREAD_ONCE_INIT;
@@ -35,7 +41,7 @@ RequestData::RequestData() :
     now_read_pos(0),
     state(STATE_PARSE_URL), 
     h_state(h_start), 
-    //keep_alive(false), 
+    keep_alive(false), 
     isAbleRead(true),
     isAbleWrite(false),
     events(0),
@@ -113,6 +119,7 @@ void RequestData::seperateTimer()
 void RequestData::handleRead()
 {
 
+    cout << "handle read" << endl;
     do
     {
         int read_sum = readn(fd, inBuffer);
@@ -295,6 +302,7 @@ int RequestData::parse_URL()
                 int _pos = _line.find('?');
                 if(_pos != -1)
                     file_name = file_name.substr(0, _pos-1);
+                    std::cout << file_name << std::endl;
             }
             else file_name = "index.html";
         }
@@ -328,6 +336,126 @@ int RequestData::parse_URL()
 int RequestData::parse_Headers()
 {
     string &str = inBuffer;
+    int key_start = -1;
+    int key_end = -1;
+    int val_start = -1;
+    int val_end = -1;
+    int now_pos = 0;
+    bool notFinish = true;
+    for(int i = 0; i < str.size(); ++i)
+    {
+        switch(h_state)
+        {
+            case h_start:
+            {
+                if(str[i] == '\r' || str[i] == '\n')
+                    break;
+                h_state = h_key;
+                key_start = i;
+                now_pos = i;
+                break;
+            }
+            case h_key:
+            {
+                if(str[i] == ':')
+                {
+                    key_end = i;
+                    if(key_end - key_start <= 0)
+                        return PARSE_HEADER_ERROR;
+                    h_state = h_colon;
+                }
+                else if (str[i] == '\r' || str[i] == '\n');
+                {
+                    return PARSE_HEADER_AGAIN;
+                }
+                break;
+            }
+            case h_colon:
+            {
+                if(str[i] == ' ')
+                {
+                    h_state = h_spaces_after_colon;
+
+                }
+                else
+                {
+                    return PARSE_HEADER_ERROR;
+                }
+                break;
+            }
+            case h_spaces_after_colon:
+            {
+                h_state = h_value;
+                val_start = i;
+                break;
+            }
+            case h_value:
+            {
+                if(str[i] == '\r')
+                {
+                    val_end = i;
+                    h_state = h_CR;
+                    if(val_end - val_start <= 0)
+                    {
+                        return PARSE_HEADER_ERROR;
+                    }
+                }
+                break;
+            }
+            case h_CR:
+            {
+                if(str[i] = '\n')
+                {
+                    h_state = h_LF;
+                    string key(str.begin() + key_start, str.begin() + key_end);
+                    string value(str.begin() + val_start, str.begin() + val_end);
+                    headers[key] = value;
+                    now_pos = i;
+                }
+                else
+                    return PARSE_HEADER_ERROR;
+                break;
+            }
+            case h_LF:
+            {
+                if(str[i] == '\r')
+                {
+                    h_state = h_end_CR;
+                }
+                else
+                {
+                    key_start = i;
+                    h_state = h_key;
+                }
+                break;
+            }
+            case h_end_CR:
+            {
+                if(str[i] == '\n')
+                {
+                    h_state = h_end_LF;
+                }
+                else
+                    return PARSE_HEADER_ERROR;
+                break;
+            }
+            case h_end_LF:
+            {
+                notFinish = false;//finish
+                key_start = i;
+                now_pos = i;
+                break;
+            }
+        }
+    }
+    if(h_state == h_end_LF)
+    {
+        str = str.substr(now_pos);
+        return PARSE_HEADER_SUCCESS;
+    }
+    else
+        str = str.substr(now_pos);
+        return PARSE_HEADER_AGAIN;
 
 }
 
@@ -335,6 +463,38 @@ int RequestData::analysisRequest()
 {
     if(method == METHOD_GET)
     {
+        string header;
+        header += "HTTP/1.1 200 OK\r\n";
+        if(headers.find("Connection") != headers.end() && headers["Connection"] == "keep-alive")
+        {
+            keep_alive = true;
+           // header += string("Connection: keep-alive\r\n") + "Keep-alive: timeout=" + ‘"500 * 1000" + "\r\n";
+        
+            header += string("Connection: keep-alive\r\n") + "Keep-alive: timeout=";
+            header += to_string(500 * 1000);
+            header += "\r\n";
+        }
+        int dot_pos = file_name.find('.');
+        string filetype;
+        if(dot_pos >= 0)
+            filetype = MimeType::getMime(file_name.substr(dot_pos));
+        else
+            filetype = MimeType::getMime("default");
+        struct stat sbuf;
+        if(stat(file_name.c_str(), &sbuf) < 0)
+        {
+            header.clear();
+            handleError(fd, 404, "Not Found!");
+            return ANALYSIS_ERROR;
+        }
+        header += "Content-type: " + filetype + "\r\n";
+        header += "Content-length: " + to_string(sbuf.st_size) + "\r\n";
+        header += "\r\n";
+        outBuffer += header;
+        int src_fd = open(file_name.c_str(), O_RDONLY, 0);
+        char *src_addr = (char *)mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, src_fd, 0);
+        close(src_fd);
+        munmap(src_addr, sbuf.st_size);
 
         return ANALYSIS_SUCCESS;
     }
@@ -346,6 +506,27 @@ int RequestData::analysisRequest()
 
 void RequestData::handleError(int fd, int err_num, string short_msg)
 {
+    short_msg += " ";
+    char send_buf[MAX_BUFF];
+    string body_buf;
+    string header_buf;
+    
+    header_buf += "HTTP/1.1 " + to_string(err_num) + short_msg + "\r\n";
+    header_buf += "Content-type: text/html\r\n";
+    header_buf += "Connection: close\r\n";
+    header_buf += "Content-length: " + to_string(body_buf.size()) + "\r\n";
+    header_buf += "\r\n";
+    
+    body_buf += "<html><title>Erro!!!!!!!!!!</title>";
+    body_buf += "<body bgcolor=\"ffffff\">";
+    body_buf += to_string(err_num) + short_msg;
+    body_buf += "<hr><em> Web Server.... </em>";
+    body_buf += "</body></html>";
+
+    sprintf(send_buf, "%s", header_buf.c_str());
+    writen(fd, send_buf, sizeof(send_buf));
+    sprintf(send_buf, "%s", body_buf.c_str());
+    writen(fd, send_buf, sizeof(send_buf));
 
 }
 

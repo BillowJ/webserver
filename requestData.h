@@ -4,13 +4,13 @@
 #include <unordered_map>
 #include <memory>
 #include <sys/epoll.h>
-
+/*
 #include <opencv/cv.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 using namespace cv;
-
+*/
 const int STATE_PARSE_URL = 1;
 const int STATE_PARSE_HEADERS = 2;
 const int STATE_RECV_BODY = 3;
