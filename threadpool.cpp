@@ -1,5 +1,7 @@
 #include "threadpool.h"
+#include <iostream>
 
+using namespace std;
 
 pthread_mutex_t ThreadPool::lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t ThreadPool::notify = PTHREAD_COND_INITIALIZER;
@@ -70,6 +72,7 @@ void myHandler(std::shared_ptr<void> req)
 
 int ThreadPool::threadpool_add(std::shared_ptr<void> args, std::function<void(std::shared_ptr<void>)> fun)
 {
+    cout << "threadpool_add" << endl;
     int next, err = 0;
     if(pthread_mutex_lock(&lock) != 0)
         return THREADPOOL_LOCK_FAILURE;
@@ -160,6 +163,7 @@ int ThreadPool::threadpool_free()
 
 void *ThreadPool::threadpool_thread(void *args)
 {
+    std::cout <<  "threadpool_thread" << std::endl;
     while(true)
     {
         ThreadPoolTask task;

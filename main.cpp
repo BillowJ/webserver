@@ -99,7 +99,7 @@ int main()
     }
     shared_ptr<RequestData> request = make_shared<RequestData>();
     request->setFd(listen_fd);
-    cout << listen_fd;
+    //cout << listen_fd;
     if (Epoll::epoll_add(listen_fd, request, EPOLLIN | EPOLLET) < 0)
     {
         perror("epoll add error");

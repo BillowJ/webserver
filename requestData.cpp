@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <queue>
 #include <iostream>
+#include <cstring>
 #include <string>
 using namespace std;
 
@@ -54,7 +55,7 @@ RequestData::RequestData(int _epollfd, int _fd, std::string _path):
     now_read_pos(0), 
     state(STATE_PARSE_URL), 
     h_state(h_start), 
-    //keep_alive(false), 
+    keep_alive(false), 
     path(_path), 
     fd(_fd), 
     epollfd(_epollfd),
@@ -149,32 +150,72 @@ void RequestData::handleRead()
             }
             else
                 //parse url finish
-                state = STATE_PARSE_HEADERS;
+                cout << "Parse URL Finish" << endl;
+            state = STATE_PARSE_HEADERS;
 
         }
         if(state == STATE_PARSE_HEADERS)
         {
+            int flag = this -> parse_Headers();
+            if(flag == PARSE_HEADER_AGAIN)
+            {
+                cout << "parse_header again." << endl;
+                break;
+            }
+            else if(flag == PARSE_HEADER_ERROR)
+            {
+                perror("3");
+                error = true;
+                handleError(fd, 400, "Bad Request");
+                break;
+            }
+            if(method == METHOD_GET)
+                state = STATE_ANALYSIS;
+            else 
+                state = STATE_RECV_BODY;
 
         }
         if(state == STATE_RECV_BODY)
         {
-
+            
+        }
+        if(state == STATE_ANALYSIS)
+        {
+            cout <<"analysisRequest" << endl;
+            int flag = this -> analysisRequest();
+            if(flag == ANALYSIS_SUCCESS)
+            {
+                cout << "state_finish" << endl;
+                state = STATE_FINISH;
+                break;
+            }
+            else
+            {
+                error = true;
+                break;
+            }
         }
 
     } while(false);
+    cout << "error: " << error << endl;
+   /*
     if(error){
         //再次监听读
         events |= EPOLLIN;
 
     }
-    else{
+    */
+    if(!error)
+    {
+        cout << "ready to write" << endl;
         if(outBuffer.size() > 0)
         {
+            cout << "EPOLLOUT"<< endl;
             events |= EPOLLOUT;
-
         }
         if(state == STATE_FINISH)
         {
+            cout << "keep-alive=" << keep_alive << endl;
             if(keep_alive)
             {
                 //长链接下继续监听read event
@@ -183,16 +224,18 @@ void RequestData::handleRead()
                 this -> reset();
                 events |= EPOLLIN;
             }
-
+            else
+                return;
         }
         else
             events |= EPOLLIN;
-        }
+    }
 
 }
 
 void RequestData::handleWrite()
 {
+    cout << "handle write" << endl;
     if(!error)
     {
         if(writen(fd, outBuffer) < 0)
@@ -202,58 +245,72 @@ void RequestData::handleWrite()
             error = true;
         }
         //缓冲区还有数据
-        else if(outBuffer.size() > 0)
+        else if(outBuffer.size() > 0){
+            cout << "writing..." << endl;
             events |= EPOLLOUT;
+        }
+        else{
+            events |= EPOLLIN;
+        }
     }
 
 }
 
 void RequestData::handleConn()
 {
-
+    cout << "handleConn" <<endl;
     if (!error)
-    {
-        int timeout = 1000;
-        if(keep_alive) timeout *= 500;
-        //io完毕 初始化 通过分发函数进行重新判定
-        isAbleRead = false;
-        isAbleWrite = false;
-        //加入请求队列前加入定时器
-        Epoll::add_timer(shared_from_this(), timeout);
-        //判断当前事件状态是否需要写回
-        if((events & EPOLLIN) && (events & EPOLLOUT))
+    {//这里遇到一个大坑 没判断当前的event是否为空
+
+        if(events != 0)
         {
+            int timeout = 1000;
+            if(keep_alive) timeout *= 500;
+            //io完毕 初始化 通过分发函数进行重新判定
+            isAbleRead = false;
+            isAbleWrite = false;
+            //加入请求队列前加入定时器
+            Epoll::add_timer(shared_from_this(), timeout);
+            //判断当前事件状态是否需要写回
+            if((events & EPOLLIN) && (events & EPOLLOUT))
+            {
+                cout <<"bug test" << endl;
+                events = __uint32_t(0);
+                events |= EPOLLOUT;
+            }
+            /*
+            else
+            {
+                events |= EPOLLIN;
+            }
+            */
+            events |= (EPOLLET | EPOLLONESHOT);
+            
+            __uint32_t _events = events;
+            events = 0;
+            int res = Epoll::epoll_mod(fd, shared_from_this(), _events);
+            if(res < 0 )
+            {
+                printf("epoll_mod failed!");
+            }
+        }
+        else if (keep_alive)
+        {
+            cout << " keep_alive" << endl;
+            isAbleRead = false;
+            isAbleWrite = false;
             events = __uint32_t(0);
-            events |= EPOLLOUT;
-        }
-        else
-        {
-            events = __uint32_t(0);
-            events |= (EPOLLIN | EPOLLONESHOT);
-        }
-        events |= EPOLLET;
-        __uint32_t _events = events;
-        events = __uint32_t(0);
-        int res = Epoll::epoll_mod(fd, shared_from_this(), _events);
-        if(res < 0 )
-        {
-            printf("epoll_mod failed!");
-        }
-    }
-    else if (keep_alive)
-    {
-        isAbleRead = false;
-        isAbleWrite = false;
-        events = __uint32_t(0);
-        events |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
-        int _events = events;
-        events = 0;
-        int timeout = 500 * 1000;
-        Epoll::add_timer(shared_from_this(), timeout); 
-        int res = Epoll::epoll_mod(fd, shared_from_this(), _events);
-        if(res < 0 )
-        {
-            printf("epoll_mod failed!");
+            events |= (EPOLLIN | EPOLLET | EPOLLONESHOT);
+            __uint32_t  _events = events;
+            events = 0;
+            int timeout = 500 * 1000;
+            Epoll::add_timer(shared_from_this(), timeout); 
+            int res = Epoll::epoll_mod(fd, shared_from_this(), _events);
+            if(res < 0 )
+            {
+                printf("epoll_mod failed!");
+        
+            }
         }
     }
 }
@@ -270,7 +327,7 @@ int RequestData::parse_URL()
     //"GET /index HTTP/1.1
     string _line = str.substr(0, pos);
     if(str.size() > pos+1)
-        str.substr(pos+1);
+       str = str.substr(pos+1);
     else
         str.clear(); //finish
     pos = _line.find("GET");
@@ -284,6 +341,7 @@ int RequestData::parse_URL()
     }
     else
     {
+        cout << "Method:GET" << endl;
         method = METHOD_GET;
     }
     pos = _line.find("/", pos);
@@ -299,9 +357,9 @@ int RequestData::parse_URL()
         {
             if(_pos - pos > 1){
                 file_name = _line.substr(pos + 1, _pos - (pos + 1));
-                int _pos = _line.find('?');
-                if(_pos != -1)
-                    file_name = file_name.substr(0, _pos-1);
+                int __pos = file_name.find('?');
+                if(__pos >= 0)
+                    file_name = file_name.substr(0, __pos);
                     std::cout << file_name << std::endl;
             }
             else file_name = "index.html";
@@ -318,7 +376,7 @@ int RequestData::parse_URL()
     }
     else
     {
-        string ver = _line.substr(pos+1, pos+3);
+        string ver = _line.substr(pos+1, 3);
         if(ver == "1.0")
             HTTPversion = HTTP_10;
         else if(ver == "1.1")
@@ -336,19 +394,21 @@ int RequestData::parse_URL()
 int RequestData::parse_Headers()
 {
     string &str = inBuffer;
+    cout << str << endl;
     int key_start = -1;
     int key_end = -1;
     int val_start = -1;
     int val_end = -1;
     int now_pos = 0;
     bool notFinish = true;
-    for(int i = 0; i < str.size(); ++i)
+    for(int i = 0; i < str.size() && notFinish; ++i)
     {
         switch(h_state)
         {
             case h_start:
             {
-                if(str[i] == '\r' || str[i] == '\n')
+                cout << str[0] << endl;
+                if(str[i] == '\n' || str[i] == '\r')
                     break;
                 h_state = h_key;
                 key_start = i;
@@ -364,10 +424,14 @@ int RequestData::parse_Headers()
                         return PARSE_HEADER_ERROR;
                     h_state = h_colon;
                 }
-                else if (str[i] == '\r' || str[i] == '\n');
+                /*
+                else if (str[i] == '\n' || str[i] == '\r');
                 {
+                    cout << "i: " << i << " " << endl;
+                    cout << "str[i] " << str[i] << endl;
+                    cout << "test" << endl;
                     return PARSE_HEADER_AGAIN;
-                }
+                }*/
                 break;
             }
             case h_colon:
@@ -410,6 +474,8 @@ int RequestData::parse_Headers()
                     string key(str.begin() + key_start, str.begin() + key_end);
                     string value(str.begin() + val_start, str.begin() + val_end);
                     headers[key] = value;
+                    cout << "key: " << key << endl;
+                    cout << "val: " << value << endl;
                     now_pos = i;
                 }
                 else
@@ -454,9 +520,10 @@ int RequestData::parse_Headers()
         return PARSE_HEADER_SUCCESS;
     }
     else
+    {
         str = str.substr(now_pos);
         return PARSE_HEADER_AGAIN;
-
+    }
 }
 
 int RequestData::analysisRequest()
@@ -484,6 +551,7 @@ int RequestData::analysisRequest()
         if(stat(file_name.c_str(), &sbuf) < 0)
         {
             header.clear();
+            cout << "file not exist" << endl;
             handleError(fd, 404, "Not Found!");
             return ANALYSIS_ERROR;
         }
@@ -494,8 +562,9 @@ int RequestData::analysisRequest()
         int src_fd = open(file_name.c_str(), O_RDONLY, 0);
         char *src_addr = (char *)mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, src_fd, 0);
         close(src_fd);
+        outBuffer += src_addr;
         munmap(src_addr, sbuf.st_size);
-
+        cout << " file anay... succerss!" << endl;
         return ANALYSIS_SUCCESS;
     }
     else
@@ -506,10 +575,15 @@ int RequestData::analysisRequest()
 
 void RequestData::handleError(int fd, int err_num, string short_msg)
 {
-    short_msg += " ";
+    short_msg = " " + short_msg;
     char send_buf[MAX_BUFF];
     string body_buf;
     string header_buf;
+    
+    body_buf += "<html><title>Erro!!!!!!!!!!</title>";
+    body_buf += "<body bgcolor=\"ffffff\">";
+    body_buf += to_string(err_num) + short_msg;
+    body_buf += "<hr><em> Web Server...</em>\n</body></html>";
     
     header_buf += "HTTP/1.1 " + to_string(err_num) + short_msg + "\r\n";
     header_buf += "Content-type: text/html\r\n";
@@ -517,16 +591,14 @@ void RequestData::handleError(int fd, int err_num, string short_msg)
     header_buf += "Content-length: " + to_string(body_buf.size()) + "\r\n";
     header_buf += "\r\n";
     
-    body_buf += "<html><title>Erro!!!!!!!!!!</title>";
-    body_buf += "<body bgcolor=\"ffffff\">";
-    body_buf += to_string(err_num) + short_msg;
-    body_buf += "<hr><em> Web Server.... </em>";
-    body_buf += "</body></html>";
-
+    //cout << body_buf << endl;
     sprintf(send_buf, "%s", header_buf.c_str());
-    writen(fd, send_buf, sizeof(send_buf));
+    //cout << "strlen(send_buf)"<<strlen(send_buf) << endl;
+    //cout << "cur_fd = " << fd << endl;
+    writen(fd, send_buf, strlen(send_buf));
+    
     sprintf(send_buf, "%s", body_buf.c_str());
-    writen(fd, send_buf, sizeof(send_buf));
+    writen(fd, send_buf, strlen(send_buf));
 
 }
 

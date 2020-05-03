@@ -4,6 +4,9 @@
 #include <signal.h>
 #include <errno.h>
 #include <string.h>
+#include <iostream>
+using namespace std;
+
 const int MAX_BUFF = 4096;
 
 ssize_t readn(int fd, void *buff, size_t n){
@@ -40,9 +43,13 @@ ssize_t readn(int fd, std::string &inBuffer)
         {
             if(errno == EINTR){
                 continue;
-            }else if(errno == EAGAIN){
+            }
+            else if(errno == EAGAIN)
+            {
                 return readSum;
-            }else{
+            }
+            else
+            {
                 perror("read error");
                 return -1;
             }
@@ -56,26 +63,42 @@ ssize_t readn(int fd, std::string &inBuffer)
 }
 
 
-ssize_t writen(int fd, void *buff, size_t n){
-    int writeSum = 0;
-    int nwritted = 0;
-    int nleft = n;
+ssize_t writen(int fd, void *buff, size_t n)
+{
+    size_t writeSum = 0;
+    size_t nwritted = 0;
+    size_t nleft = n;
     char *ptr = (char *)buff;
-    while(nleft > 0){
-        if((nwritted = read(fd, ptr, nleft)) <= 0){
-            if(nwritted < 0){
-                if(errno == EINTR || errno == EAGAIN){
+    while(nleft > 0)
+    {
+        if((nwritted = write(fd, ptr, nleft)) <= 0)
+        {
+            if(nwritted < 0)
+            {
+                if(errno == EINTR)
+                {
                     nwritted = 0;
                     continue;
-                }else{
-                    return -1;
                 }
+                else if(errno == EAGAIN)
+                {
+                    return writeSum;
+                }
+                else
+                    return -1;
             }
         }
         writeSum += nwritted;
         nleft -= nwritted;
         ptr += nwritted;
     }
+    //cout << "writeSum" << writeSum << endl;
+    /*
+    if(writeSum == buff.size())
+        buff.clear();
+    else
+        buff = buff.substr(writeSum);
+    */
     return writeSum;
 }
 

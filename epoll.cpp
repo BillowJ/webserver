@@ -184,7 +184,7 @@ std::vector<std::shared_ptr<RequestData>> Epoll::getEventsRequest(int listen_fd,
                     cout << "enable Read" <<endl;
                     cur_req -> enableRead();
                 }
-                else
+                if((events[i].events & EPOLLOUT))
                 {
                     cout << "enable Write" << endl;
                     cur_req -> enableWrite();
