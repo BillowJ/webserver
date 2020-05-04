@@ -125,6 +125,7 @@ void RequestData::handleRead()
     {
         int read_sum = readn(fd, inBuffer);
         //read errno
+        cout << "read_sum:" << read_sum << endl;
         if(read_sum < 0){
             perror("readn error!");
             error = true;
@@ -132,6 +133,7 @@ void RequestData::handleRead()
             break;
         }
         else if(read_sum == 0){
+            cout <<"read_sum == 0 error" << endl;
             error = true;
             break;
         }
@@ -191,6 +193,7 @@ void RequestData::handleRead()
             }
             else
             {
+                cout << "analysis error!" << endl;
                 error = true;
                 break;
             }
@@ -213,6 +216,7 @@ void RequestData::handleRead()
             cout << "EPOLLOUT"<< endl;
             events |= EPOLLOUT;
         }
+        //一开始判定了错误的返回状态 导致出现死循环写.
         if(state == STATE_FINISH)
         {
             cout << "keep-alive=" << keep_alive << endl;
@@ -249,9 +253,12 @@ void RequestData::handleWrite()
             cout << "writing..." << endl;
             events |= EPOLLOUT;
         }
+        /*
+         不可以如果写完直接置成EPOLLIN 如果是短连接直接断开置为空
         else{
             events |= EPOLLIN;
         }
+        */
     }
 
 }
